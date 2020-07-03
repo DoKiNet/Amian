@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.0
-AMIAN_BUILD=1.0.5
+AMIAN_BUILD=1.0.6
 
 # Clean the chroot
 lb clean
