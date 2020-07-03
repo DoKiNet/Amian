@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.0
-AMIAN_BUILD=1.0.0
+AMIAN_BUILD=1.0.1
 
 # Clean the chroot
 lb clean
@@ -16,7 +16,7 @@ echo task-english >> config/package-lists/desktop.list.chroot
 
 # Configure repository packages
 echo    "vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount
-        macchanger aircrack-ng openvas" > config/package-lists/custom.list.chroot 
+        macchanger aircrack-ng openvas" > config/package-lists/custom.list.chroot
 
 #HOOK in BOOT TIME
 mkdir -p config/includes.chroot/lib/live/config
@@ -78,11 +78,11 @@ echo "set mouse=" > config/includes.chroot/home/user/.vimrc
 
 mkdir -p config/includes.chroot/etc
 touch config/includes.chroot/etc/amian_version
-echo "Amian 0.3" > config/includes.chroot/etc/amian_version
+echo "Amian $AMIAN_VERSION" > config/includes.chroot/etc/amian_version
 
 mkdir -p config/bootloaders
 cp -r /usr/share/live/build/bootloaders/isolinux config/bootloaders/
-mv amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
+cp amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
 rm config/bootloaders/isolinux/splash.svg
 
 
