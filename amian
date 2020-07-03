@@ -1,0 +1,96 @@
+#!/bin/bash
+
+AMIAN_VERSION=1.0
+AMIAN_BUILD=1.0.0
+
+# Clean the chroot
+lb clean
+
+# Configure live machine hostname, live user and locales
+lb config --bootloaders syslinux -a amd64 --debian-installer live -b iso-hybrid --archive-areas "main contrib non-free" --bootappend-live "boot=live config locales=en_US.UTF-8 keyboard-layouts=us username=user hostname=amian user-fullname=user@amian"
+
+# Configure basic desktop packages
+echo task-gnome-desktop > config/package-lists/desktop.list.chroot
+echo task-english >> config/package-lists/desktop.list.chroot
+
+
+# Configure repository packages
+echo    "vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount
+        macchanger aircrack-ng openvas" > config/package-lists/custom.list.chroot 
+
+#HOOK in BOOT TIME
+mkdir -p config/includes.chroot/lib/live/config
+touch config/includes.chroot/lib/live/config/boot_time_hook
+echo "#!/bin/sh" > config/includes.chroot/lib/live/config/boot_time_hook
+#END HOOK in BOOT TIME
+
+
+###HOOK
+mkdir -p config/includes.chroot/usr/share/amian/images
+cp amian_wallpaper.png config/includes.chroot/usr/share/amian/images/
+cat > config/hooks/custom.chroot<< EOF
+#!/bin/bash
+EOF
+####END HOOK
+
+
+#GNOME3 CONFIGURATION
+mkdir -p config/includes.chroot/home/user/.config/autostart
+
+cat > config/includes.chroot/home/user/.config/myscript.sh << EOF
+#!/bin/sh
+set -e
+gsettings set org.gnome.desktop.background picture-uri file:///usr/share/amian/images/amian_wallpaper.png
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
+
+ret=\$(zenity --entry --title="Amian" --text="Select your keyboard" --entry-text="us" it fr de es ru gb fi pt jp cn hu no ro se --cancel-label cancel --ok-label ok)
+
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', '\$ret')]"
+
+if [ "\$ret" = "it" ]; then
+               sudo ln -fs /usr/share/zoneinfo/Europe/Rome /etc/localtime
+            else
+               sudo ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
+fi
+
+EOF
+
+
+cat > config/includes.chroot/home/user/.config/autostart/myscript.desktop << EOF
+[Desktop Entry]
+Name=MyScript
+GenericName=Gnome3 Configuration
+Comment=this is my custom configuration
+Exec=/bin/sh /home/user/.config/myscript.sh
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
+EOF
+
+chmod -R 777 config/includes.chroot/home/user/.config
+
+#END GNOME3 CONFIGURATION
+
+
+touch config/includes.chroot/home/user/.vimrc
+echo "set mouse=" > config/includes.chroot/home/user/.vimrc
+
+mkdir -p config/includes.chroot/etc
+touch config/includes.chroot/etc/amian_version
+echo "Amian 0.3" > config/includes.chroot/etc/amian_version
+
+mkdir -p config/bootloaders
+cp -r /usr/share/live/build/bootloaders/isolinux config/bootloaders/
+mv amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
+rm config/bootloaders/isolinux/splash.svg
+
+
+# Configure WWW
+#mkdir -p config/includes.chroot/var/www/html
+#touch config/includes.chroot/var/www/html/index.php
+#echo "<?php phpinfo(); ?>" > config/includes.chroot/var/www/html/index.php
+
+
+# Finally, build your debian system
+lb build
