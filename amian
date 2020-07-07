@@ -1,15 +1,32 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.0
-AMIAN_BUILD=1.0.6
+AMIAN_BUILD=1.0.7
 
-# Clean the chroot
-lb clean
+########### BEGIN CLEAN ###########
+set -e
+lb clean noauto "${@}"
+rm -f config/binary config/bootstrap config/chroot config/common config/source
+rm -f build.log
+########### END CLEAN ###########
 
-# Configure live machine hostname, live user and locales
+
+########### BEGIN CONFIG ###########
 #--interactive shell \
-lb config --distribution buster --bootloaders syslinux -a amd64 --debian-installer live -b iso-hybrid  --archive-areas "main contrib non-free" --bootappend-live "boot=live config locales=en_US.UTF-8 keyboard-layouts=us username=user hostname=amian user-fullname=user@amian"
 
+set -e
+lb config noauto \
+        --mode debian \
+        --distribution buster  \
+        --bootloaders syslinux \
+        --architectures amd64 \
+        --debian-installer live \
+        --binary-images iso-hybrid  \
+        --archive-areas "main contrib non-free" \
+        --bootappend-live "boot=live config locales=en_US.UTF-8 keyboard-layouts=us username=user hostname=amian user-fullname=user@amian" \
+        --apt-indices false \
+        --memtest none \
+        "${@}"
 
 # Configure basic desktop packages
 echo task-gnome-desktop > config/package-lists/desktop.list.chroot
@@ -28,16 +45,19 @@ echo "#!/bin/sh" > config/includes.chroot/lib/live/config/boot_time_hook
 
 
 ###HOOK
-mkdir -p config/includes.chroot/usr/share/amian/images
-cp amian_wallpaper.png config/includes.chroot/usr/share/amian/images/
-cat > config/hooks/custom.chroot<< EOF
+cat > config/hooks/live/amian.hook.chroot << EOF
 #!/bin/bash
+
+set -e
 openvas-setup
+openvasmd --user admin --new-password live
 EOF
 ####END HOOK
 
 
 #GNOME3 CONFIGURATION
+mkdir -p config/includes.chroot/usr/share/amian/images
+cp amian_wallpaper.png config/includes.chroot/usr/share/amian/images/
 mkdir -p config/includes.chroot/home/user/.config/autostart
 
 cat > config/includes.chroot/home/user/.config/myscript.sh << EOF
@@ -94,6 +114,13 @@ rm config/bootloaders/isolinux/splash.svg
 #touch config/includes.chroot/var/www/html/index.php
 #echo "<?php phpinfo(); ?>" > config/includes.chroot/var/www/html/index.php
 
+########### END CONFIG ###########
 
-# Finally, build your debian system
-lb build
+
+
+
+
+########### BEGIN BUILD ###########
+set -e
+lb build noauto "${@}" 2>&1 | tee build.log
+########### END BUILD ###########
