@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.0
-AMIAN_BUILD=1.0.8
+AMIAN_BUILD=1.0.9
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -12,7 +12,9 @@ rm -f build.log
 
 
 ########### BEGIN CONFIG ###########
-#--interactive shell \
+# --interactive shell \
+# --apt-indices false \
+# --memtest none \
 
 set -e
 lb config noauto \
@@ -24,8 +26,6 @@ lb config noauto \
         --binary-images iso-hybrid  \
         --archive-areas "main contrib non-free" \
         --bootappend-live "boot=live config locales=en_US.UTF-8 keyboard-layouts=us username=user hostname=amian user-fullname=user@amian" \
-        --apt-indices false \
-        --memtest none \
         "${@}"
 
 # Configure basic desktop packages
@@ -36,7 +36,7 @@ echo task-english >> config/package-lists/desktop.list.chroot
 # Configure repository packages
 #
 
-echo    "openvas macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount" > config/package-lists/custom.list.chroot
+echo    "cpulimit openvas macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount" > config/package-lists/custom.list.chroot
 
 #HOOK in BOOT TIME
 mkdir -p config/includes.chroot/lib/live/config
@@ -53,6 +53,17 @@ set -e
 openvas-setup
 openvasmd --user admin --new-password live
 openvas-feed-update
+
+#mkdir /var/run/redis-openvas
+#PIDFile=/run/redis/redis-server.pid
+#/usr/bin/redis-server /etc/redis/redis.conf
+#/usr/bin/redis-server /etc/redis/redis-openvas.conf
+#PIDFile=/var/run/openvasmd.pid
+#/usr/sbin/openvasmd --listen=127.0.0.1 --port=9390 --database=/var/lib/openvas/mgr/tasks.db
+#PIDFile=/var/run/openvassd.pid
+#/usr/sbin/openvassd --unix-socket=/var/run/openvassd.sock
+#openvasmd --update --progress --verbose
+
 EOF
 ####END HOOK
 
@@ -69,7 +80,7 @@ gsettings set org.gnome.desktop.background picture-uri file:///usr/share/amian/i
 gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
 gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
 
-sudo /usr/sbin/openvasmd --update &
+sudo cpulimit -l 5 /usr/sbin/openvasmd --update &
 
 ret=\$(zenity --entry --title="Amian" --text="Select your keyboard" --entry-text="us" it fr de es ru gb fi pt jp cn hu no ro se --cancel-label cancel --ok-label ok)
 
