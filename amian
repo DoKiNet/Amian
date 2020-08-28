@@ -1,7 +1,7 @@
 #!/bin/bash
 
-AMIAN_VERSION=1.0
-AMIAN_BUILD=1.0.9
+AMIAN_VERSION=1.1
+AMIAN_BUILD=1.1.0
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -20,6 +20,7 @@ set -e
 lb config noauto \
         --mode debian \
         --distribution buster  \
+        --interactive shell \
         --bootloaders syslinux \
         --architectures amd64 \
         --debian-installer live \
@@ -36,7 +37,7 @@ echo task-english >> config/package-lists/desktop.list.chroot
 # Configure repository packages
 #
 
-echo    "cpulimit openvas macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount" > config/package-lists/custom.list.chroot
+echo    "git wget macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount" > config/package-lists/custom.list.chroot
 
 #HOOK in BOOT TIME
 mkdir -p config/includes.chroot/lib/live/config
@@ -50,19 +51,11 @@ cat > config/hooks/live/amian.hook.chroot << EOF
 #!/bin/bash
 
 set -e
-openvas-setup
-openvasmd --user admin --new-password live
-openvas-feed-update
 
-#mkdir /var/run/redis-openvas
-#PIDFile=/run/redis/redis-server.pid
-#/usr/bin/redis-server /etc/redis/redis.conf
-#/usr/bin/redis-server /etc/redis/redis-openvas.conf
-#PIDFile=/var/run/openvasmd.pid
-#/usr/sbin/openvasmd --listen=127.0.0.1 --port=9390 --database=/var/lib/openvas/mgr/tasks.db
-#PIDFile=/var/run/openvassd.pid
-#/usr/sbin/openvassd --unix-socket=/var/run/openvassd.sock
-#openvasmd --update --progress --verbose
+cd /root
+git clone https://github.com/DoKiNet/GVMI.git
+cd GVMI
+./gvmi install gvm11
 
 EOF
 ####END HOOK
@@ -79,8 +72,6 @@ set -e
 gsettings set org.gnome.desktop.background picture-uri file:///usr/share/amian/images/amian_wallpaper.png
 gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
 gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
-
-sudo cpulimit -l 5 /usr/sbin/openvasmd --update &
 
 ret=\$(zenity --entry --title="Amian" --text="Select your keyboard" --entry-text="us" it fr de es ru gb fi pt jp cn hu no ro se --cancel-label cancel --ok-label ok)
 
