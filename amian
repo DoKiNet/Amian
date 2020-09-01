@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.0
+AMIAN_BUILD=1.1.1
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -15,12 +15,12 @@ rm -f build.log
 # --interactive shell \
 # --apt-indices false \
 # --memtest none \
+# --hdd-size 4096 \
 
 set -e
 lb config noauto \
         --mode debian \
         --distribution buster  \
-        --interactive shell \
         --bootloaders syslinux \
         --architectures amd64 \
         --debian-installer live \
@@ -53,9 +53,9 @@ cat > config/hooks/live/amian.hook.chroot << EOF
 set -e
 
 cd /root
-git clone https://github.com/DoKiNet/GVMI.git
-cd GVMI
-./gvmi install gvm11
+git clone https://github.com/DoKiNet/DBox.git
+cd DBox
+./dbox install server
 
 EOF
 ####END HOOK
