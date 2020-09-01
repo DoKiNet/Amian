@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.2
+AMIAN_BUILD=1.1.3
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -46,8 +46,17 @@ cat > config/includes.chroot/lib/live/config/boot_time_hook << EOF
 #!/bin/bash
 
 set -e
-virsh net-start default
-virsh net-autostart default
+
+touch /var/log/amian.log
+
+###### BEGIN - DBOX - BOOT TIME ######
+echo "virsh net-start default" >> /var/log/amian.log
+virsh net-start default >> /var/log/amian.log
+
+echo "virsh net-autostart default" >> /var/log/amian.log
+virsh net-autostart default >> /var/log/amian.log
+###### END - DBOX - BOOT TIME ######
+
 EOF
 #END HOOK in BOOT TIME
 
