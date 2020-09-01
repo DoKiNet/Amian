@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.1
+AMIAN_BUILD=1.1.2
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -42,9 +42,14 @@ echo    "git wget macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois
 #HOOK in BOOT TIME
 mkdir -p config/includes.chroot/lib/live/config
 touch config/includes.chroot/lib/live/config/boot_time_hook
-echo "#!/bin/sh" > config/includes.chroot/lib/live/config/boot_time_hook
-#END HOOK in BOOT TIME
+cat > config/includes.chroot/lib/live/config/boot_time_hook << EOF
+#!/bin/bash
 
+set -e
+virsh net-start default
+virsh net-autostart default
+EOF
+#END HOOK in BOOT TIME
 
 ###HOOK
 cat > config/hooks/live/amian.hook.chroot << EOF
