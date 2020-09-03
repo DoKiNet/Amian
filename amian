@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.4
+AMIAN_BUILD=1.1.5
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -58,6 +58,31 @@ set -e
 virsh net-start default
 virsh net-autostart default
 EOF
+chmod 775 config/includes.chroot/root/startup.sh
+
+touch config/includes.chroot/etc/systemd/system/startup.service
+cat > config/includes.chroot/etc/systemd/system/startup.service << EOF
+[Unit]
+Description=Amian Startup Service
+After=network.target
+After=systemd-user-sessions.service
+After=network-online.target
+
+[Service]
+User=root
+Type=forking
+ExecStart=/root/startup.sh
+TimeoutSec=30
+Restart=on-failure
+RestartSec=30
+StartLimitInterval=350
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable startup.service
 
 ###### END STARTUP SERVICE ######
 
