@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.7
+AMIAN_BUILD=1.1.8
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -18,6 +18,7 @@ rm -f build.log
 
 set -e
 lb config noauto \
+        --memtest memtest86+ \
         --mode debian \
         --distribution buster  \
         --bootloaders syslinux \
@@ -100,6 +101,10 @@ set -e
 gsettings set org.gnome.desktop.background picture-uri file:///usr/share/amian/images/amian_wallpaper.png
 gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
 gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'nothing'
+gsettings set org.gnome.mutter center-new-windows true
+
 
 ret=\$(zenity --entry --title="Amian" --text="Select your keyboard" --entry-text="us" it fr de es ru gb fi pt jp cn hu no ro se --cancel-label cancel --ok-label ok)
 
