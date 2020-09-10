@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.9
+AMIAN_BUILD=1.1.10
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -148,6 +148,14 @@ echo "set mouse=" > config/includes.chroot/home/user/.vimrc
 touch config/includes.chroot/root/.vimrc
 echo "set mouse=" > config/includes.chroot/root/.vimrc
 ###### END VIM CONFIGURATION ######
+
+###### BEGIN AMIAN_DATA INIT ######
+mkdir -p config/includes.chroot/AMIAN_DATA
+chmod -R 777 config/includes.chroot/AMIAN_DATA
+cat > config/includes.chroot/etc/lxc/lxc.conf << EOF
+lxc.lxcpath=/AMIAN_DATA/
+EOF
+###### END AMIAN_DATA INIT ######
 
 mkdir -p config/includes.chroot/etc
 touch config/includes.chroot/etc/amian_version
