@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.14
+AMIAN_BUILD=1.1.15
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -101,7 +101,7 @@ EOF
 
 #GNOME3 CONFIGURATION
 mkdir -p config/includes.chroot/usr/share/amian/images
-cp amian_wallpaper.png config/includes.chroot/usr/share/amian/images/
+cp images/amian_wallpaper.png config/includes.chroot/usr/share/amian/images/
 mkdir -p config/includes.chroot/home/user/.config/autostart
 
 cat > config/includes.chroot/home/user/.config/myscript.sh << EOF
@@ -167,7 +167,7 @@ echo "Amian $AMIAN_VERSION" > config/includes.chroot/etc/amian_version
 ####### BEGIN BOOTLOADER #######
 mkdir -p config/bootloaders
 cp -r /usr/share/live/build/bootloaders/isolinux config/bootloaders/
-cp amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
+cp images/amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
 rm config/bootloaders/isolinux/splash.svg
 echo "" > config/bootloaders/isolinux/install.cfg
 ####### END BOOTLOADER #######
