@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.17
+AMIAN_BUILD=1.1.18
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -72,6 +72,12 @@ set -e
 
 virsh net-start default
 virsh net-autostart default
+
+AMIAN_PARTITION=\$(df | grep "/run/live/medium" | cut -d  ' ' -f 1)
+DEVICE=\${AMIAN_PARTITION:0:8}
+PERSISTENT_PARTITION="\$DEVICE"2
+
+echo "\$PERSISTENT_PARTITION /AMIAN_DATA ext4 defaults 0 0" >> /etc/fstab
 EOF
 chmod 775 config/includes.chroot/root/startup.sh
 
