@@ -16,8 +16,17 @@ if  [ "$(f1)" ]; then
     echo " "$PERSISTENT_PARTITION MOUNTED IN /AMIAN_DATA
 else
 	echo " "$PERSISTENT_PARTITION NOT FOUND
-    #creo la partizione sfruttando tutto lo spazio non allocato
-    #/dev/sdb2
-    #mkfs.ext4 -L AMIAN_DATA /dev/sdb2
-	#mount DEVICE2 /AMIAN_DATA
+    fdisk $DEVICE << EOF
+n
+
+
+
+
+w
+q
+EOF
+    mkfs.ext4 -L AMIAN_DATA $PERSISTENT_PARTITION
+    echo " "$PERSISTENT_PARTITION CREATED
+    mount $PERSISTENT_PARTITION /AMIAN_DATA
+    echo " "$PERSISTENT_PARTITION MOUNTED IN /AMIAN_DATA
 fi
