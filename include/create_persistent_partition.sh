@@ -12,10 +12,10 @@ f1(){
 
 if  [ "$(f1)" ]; then
     echo " "$PERSISTENT_PARTITION FOUND
-	mount $PERSISTENT_PARTITION /media/user/AMIAN_DATA
-    chown -R user:user /media/user/AMIAN_DATA
-    chmod -R 777 /media/user/AMIAN_DATA
-    echo " "$PERSISTENT_PARTITION MOUNTED IN /media/user/AMIAN_DATA
+	mount $PERSISTENT_PARTITION /AMIAN_DATA
+    chown -R user:user /AMIAN_DATA
+    chmod -R 777 /AMIAN_DATA
+    echo " "$PERSISTENT_PARTITION MOUNTED IN /AMIAN_DATA
 else
 	echo " "$PERSISTENT_PARTITION NOT FOUND
     fdisk $DEVICE << EOF
@@ -29,8 +29,8 @@ q
 EOF
     mkfs.ext4 -L AMIAN_DATA -F $PERSISTENT_PARTITION
     echo " "$PERSISTENT_PARTITION CREATED
-    mount $PERSISTENT_PARTITION /media/user/AMIAN_DATA
-    chown -R user:user /media/user/AMIAN_DATA
-    chmod -R 777 /media/user/AMIAN_DATA
-    echo " "$PERSISTENT_PARTITION MOUNTED IN /media/user/AMIAN_DATA
+    mount $PERSISTENT_PARTITION /AMIAN_DATA
+    chown -R user:user /AMIAN_DATA
+    chmod -R 777 /AMIAN_DATA
+    echo " "$PERSISTENT_PARTITION MOUNTED IN /AMIAN_DATA
 fi
