@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.34
+AMIAN_BUILD=1.1.35
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -67,8 +67,7 @@ wget https://www.torproject.org/dist/torbrowser/9.5.4/tor-browser-linux64-9.5.4_
 tar -xvJf tor-browser-linux64-9.5.4_en-US.tar.xz
 rm tor-browser-linux64-9.5.4_en-US.tar.xz
 mv tor-browser_en-US torbrowser
-chown -R user:user torbrowser
-chmod -R 777 torbrowser
+
 
 #su user -c "env -C /opt/torbrowser ./start-tor-browser.desktop --register-app"
 
@@ -84,6 +83,9 @@ cat > config/includes.chroot/root/startup.sh << EOF
 #!/bin/bash
 
 set -e
+
+chown -R user:user /opt/torbrowser
+chmod -R 777 /opt/torbrowser
 
 virsh net-start default
 virsh net-autostart default
