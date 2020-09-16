@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.35
+AMIAN_BUILD=1.1.36
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -68,8 +68,22 @@ tar -xvJf tor-browser-linux64-9.5.4_en-US.tar.xz
 rm tor-browser-linux64-9.5.4_en-US.tar.xz
 mv tor-browser_en-US torbrowser
 
-
-#su user -c "env -C /opt/torbrowser ./start-tor-browser.desktop --register-app"
+cd /usr/share/applications
+touch start-tor-browser.desktop
+chmod 755 start-tor-browser.desktop
+cat > start-tor-browser.desktop << EOB
+#!/usr/bin/env ./Browser/execdesktop
+[Desktop Entry]
+Type=Application
+Name=Tor Browser
+GenericName=Web Browser
+Comment=Tor Browser is +1 for privacy and −1 for mass surveillance
+Categories=Network;WebBrowser;Security;
+Exec=sh -c '"/opt/torbrowser/Browser/start-tor-browser" --detach || ([ !  -x "/opt/torbrowser/Browser/start-tor-browser" ] && "$(dirname "$*")"/Browser/start-tor-browser --detach)' dummy %k
+X-TorBrowser-ExecShell=./Browser/start-tor-browser --detach
+Icon=/opt/torbrowser/Browser/browser/chrome/icons/default/default128.png
+StartupWMClass=Tor Browser
+EOB
 
 EOF
 ####END HOOK
