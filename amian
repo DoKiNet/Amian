@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.1
-AMIAN_BUILD=1.1.36
+AMIAN_BUILD=1.1.37
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -214,6 +214,8 @@ cp -r /usr/share/live/build/bootloaders/isolinux config/bootloaders/
 cp images/amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
 rm config/bootloaders/isolinux/splash.svg
 echo "" > config/bootloaders/isolinux/install.cfg
+
+sed -i 's/timeout.*/timeout 3/' config/bootloaders/isolinux/isolinux.cfg
 ####### END BOOTLOADER #######
 
 # Configure WWW
