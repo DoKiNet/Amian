@@ -41,6 +41,9 @@ else
 fi
 
 
-#get gvm11 ip address
-#firefox https://ipaddress:9392
+IP=$(lxc-attach -n gvm11 -- hostname -I)
+echo ""
+echo "https://$IP:9392"
+echo ""
+#firefox https://$IP:9392
 #import ssl certificate in firefox
