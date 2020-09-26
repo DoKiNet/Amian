@@ -14,7 +14,6 @@ check_persistent_partition(){
     fi
 }
 
-sudo su
 
 if [ "$(check_persistent_partition)" == "1" ]; then
     echo ""
