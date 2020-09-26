@@ -6,7 +6,8 @@ check_persistent_partition(){
     AMIAN_PARTITION=$(df | grep "/run/live/medium" | cut -d  ' ' -f 1)
     DEVICE=${AMIAN_PARTITION:0:8}
     PERSISTENT_PARTITION="$DEVICE"2
-    if [ "$(df --output=source,target)" == "$PERSISTENT_PARTITION      /AMIAN_DATA" ]; then
+    MOUNT_POINT="/AMIAN_DATA"
+    if [ "$(df --output=source,target | grep $PERSISTENT_PARTITION | sed 's/ //g')" == "$PERSISTENT_PARTITION$MOUNT_POINT" ]; then
         echo "1"
     else
         echo "0"
