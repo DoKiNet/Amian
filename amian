@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.2
-AMIAN_BUILD=1.2.9
+AMIAN_BUILD=1.2.10
 
 ########### BEGIN CLEAN ###########
 set -e

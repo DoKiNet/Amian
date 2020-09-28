@@ -30,16 +30,13 @@ if [ -d "/AMIAN_DATA/DBox/gvm11" ]; then
     echo ""
     echo "Directory \"/AMIAN_DATA/DBox/gvm11\": FOUND"
     dbox start gvm11
-    lxc-attach -n gvm11 -- gvmi start gvm11
+    lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11
 else
     mkdir -p /AMIAN_DATA/DBox
     chmod -R 777 /AMIAN_DATA
-    cp /root/gvm11.dbox /AMIAN_DATA/DBox/
-    cd /AMIAN_DATA/DBox/
-    tar -xvzf gvm11.dbox
-    rm gvm11.dbox
+    tar -xvJf /usr/share/amian/dboxes/gvm11.dbox -C /AMIAN_DATA/DBox/
     dbox start gvm11
-    lxc-attach -n gvm11 -- gvmi start gvm11
+    lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11
 fi
 
 
