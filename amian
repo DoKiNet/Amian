@@ -1,7 +1,10 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.2
-AMIAN_BUILD=1.2.10
+AMIAN_BUILD=1.2.11
+
+apt update
+apt -y install live-build
 
 ########### BEGIN CLEAN ###########
 set -e
