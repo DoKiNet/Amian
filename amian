@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.2
-AMIAN_BUILD=1.2.8
+AMIAN_BUILD=1.2.9
 
 ########### BEGIN CLEAN ###########
 set -e
@@ -222,6 +222,8 @@ cp include/create_persistent_partition.sh config/includes.chroot/root/
 cp include/start_gvm.sh config/includes.chroot/root/
 mkdir -p config/includes.chroot/usr/share/icons/hicolor/256x256/apps
 cp images/gvmi.png config/includes.chroot/usr/share/icons/hicolor/256x256/apps/
+mkdir -p config/includes.chroot/usr/share/amian/dboxes
+cp dboxes/gvm11.dbox config/includes.chroot/usr/share/amian/dboxes/
 ###### END GVMI ######
 
 
@@ -238,7 +240,7 @@ cp images/amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
 rm config/bootloaders/isolinux/splash.svg
 echo "" > config/bootloaders/isolinux/install.cfg
 
-sed -i 's/timeout.*/timeout 40/' config/bootloaders/isolinux/isolinux.cfg
+sed -i 's/timeout.*/timeout 30/' config/bootloaders/isolinux/isolinux.cfg
 ####### END BOOTLOADER #######
 
 # Configure WWW
