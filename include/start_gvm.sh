@@ -34,7 +34,7 @@ if [ -d "/AMIAN_DATA/DBox/gvm11" ]; then
 else
     mkdir -p /AMIAN_DATA/DBox
     chmod -R 777 /AMIAN_DATA
-    tar -xvJf /usr/share/amian/dboxes/gvm11.dbox -C /AMIAN_DATA/DBox/
+    nocache tar -xvJf /usr/share/amian/dboxes/gvm11.dbox -C /AMIAN_DATA/DBox/
     dbox start gvm11
     lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11
 fi
