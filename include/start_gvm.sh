@@ -39,12 +39,15 @@ else
     cd /AMIAN_DATA/DBox
     nocache tar -xvJf gvm11.dbox
     rm gvm11.dbox
+    #here i could free cache memory
     dbox start gvm11
-    lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11
+    sleep 10
+    lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11&
 fi
 
 
 IP=$(lxc-attach -n gvm11 -- hostname -I)
+#here i have to clean the IP string removing spaces
 echo ""
 echo "https://$IP:9392"
 echo ""
