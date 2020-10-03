@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.2
-AMIAN_BUILD=1.2.12
+AMIAN_BUILD=1.2.13
 
 apt update
 apt -y install live-build
@@ -97,7 +97,7 @@ Type=Application
 Name=Greenbone Vulnerability Management
 GenericName=Greenbone Vulnerability Management
 Categories=Network;Security;
-Exec=xterm -T "Greenbone Vulnerability Management" -hold -e sudo /root/start_gvm.sh
+Exec=xterm -T "Greenbone Vulnerability Management Installer" -hold -e sudo /root/start_gvm.sh
 Icon=gvmi
 EOB
 
