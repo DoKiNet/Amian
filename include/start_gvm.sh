@@ -36,16 +36,17 @@ else
     chmod -R 777 /AMIAN_DATA
     #nocache tar -xvJf /usr/share/amian/dboxes/gvm11.dbox -C /AMIAN_DATA/DBox/
     cp /usr/share/amian/dboxes/gvm11.dbox /AMIAN_DATA/DBox/
+    #here i could free cache memory
     cd /AMIAN_DATA/DBox
     nocache tar -xvJf gvm11.dbox
     rm gvm11.dbox
     #here i could free cache memory
     dbox start gvm11
     sleep 10
-    lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11&
+    lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11
 fi
 
-
+#i could add a while loop until IP!=null
 IP=$(lxc-attach -n gvm11 -- hostname -I)
 #here i have to clean the IP string removing spaces
 echo ""
