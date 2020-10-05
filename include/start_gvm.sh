@@ -34,9 +34,9 @@ if [ -d "/AMIAN_DATA/DBox/gvm11" ]; then
 else
     mkdir -p /AMIAN_DATA/DBox
     chmod -R 777 /AMIAN_DATA
-    cp /usr/share/amian/dboxes/gvm11.dbox /AMIAN_DATA/DBox/
+    cd /AMIAN_DATA/DBox/
+    wget https://sourceforge.net/projects/dbox-containers/files/gvm11.dbox/download -O gvm11.dbox
     sync; echo 1 > /proc/sys/vm/drop_caches
-    cd /AMIAN_DATA/DBox
     nocache tar -xvJf gvm11.dbox
     rm gvm11.dbox
     sync; echo 1 > /proc/sys/vm/drop_caches

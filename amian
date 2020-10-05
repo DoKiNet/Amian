@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.2
-AMIAN_BUILD=1.2.18
+AMIAN_BUILD=1.2.19
 
 apt update
 apt -y install live-build
@@ -226,7 +226,7 @@ cp include/start_gvm.sh config/includes.chroot/root/
 mkdir -p config/includes.chroot/usr/share/icons/hicolor/256x256/apps
 cp images/gvmi.png config/includes.chroot/usr/share/icons/hicolor/256x256/apps/
 mkdir -p config/includes.chroot/usr/share/amian/dboxes
-cp dboxes/gvm11.dbox config/includes.chroot/usr/share/amian/dboxes/
+#cp dboxes/gvm11.dbox config/includes.chroot/usr/share/amian/dboxes/
 ###### END GVMI ######
 
 
