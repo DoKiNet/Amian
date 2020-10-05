@@ -34,13 +34,12 @@ if [ -d "/AMIAN_DATA/DBox/gvm11" ]; then
 else
     mkdir -p /AMIAN_DATA/DBox
     chmod -R 777 /AMIAN_DATA
-    #nocache tar -xvJf /usr/share/amian/dboxes/gvm11.dbox -C /AMIAN_DATA/DBox/
     cp /usr/share/amian/dboxes/gvm11.dbox /AMIAN_DATA/DBox/
-    #here i could free cache memory
+    sync; echo 1 > /proc/sys/vm/drop_caches
     cd /AMIAN_DATA/DBox
     nocache tar -xvJf gvm11.dbox
     rm gvm11.dbox
-    #here i could free cache memory
+    sync; echo 1 > /proc/sys/vm/drop_caches
     dbox start gvm11
     sleep 10
     lxc-attach -n gvm11 -- env -C /root/gvmi ./gvmi start gvm11
