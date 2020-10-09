@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=1.2
-AMIAN_BUILD=1.2.22
+AMIAN_BUILD=1.2.23
 
 apt update
 apt -y install live-build
@@ -120,7 +120,7 @@ set -e
 chown -R user:user /opt/torbrowser
 chmod -R 777 /opt/torbrowser
 
-chmod 755 /root/start_gvm.sh
+#chmod 755 /root/start_gvm.sh
 
 virsh net-start default
 virsh net-autostart default
