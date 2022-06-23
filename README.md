@@ -7,4 +7,3 @@ List of some installed applications:
 * Firefox
 * Tor Browser
 * youtube-dl
-* DBox
