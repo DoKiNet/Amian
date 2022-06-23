@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.3
+AMIAN_BUILD=2.0.4
 
 apt update
 apt -y install live-build
