@@ -1,9 +1,54 @@
 #!/bin/bash
 
+set -e
+
+
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.8
+AMIAN_BUILD=2.0.9
 
 apt update
 apt -y install live-build
+
+
+
+
+
+########### BEGIN CLEAN ###########
+lb clean
+rm -f config/binary config/bootstrap config/chroot config/common config/source
+########### END CLEAN ###########
+
+
+
+
+
+
+########### BEGIN CONFIG ###########
+########### END CONFIG ###########
+
+
+
+########### BEGIN PACKAGES ###########
+########### END PACKAGES ###########
+
+
+
+########### BEGIN FILES ###########
+########### END FILES ###########
+
+
+
+########### BEGIN BUILD HOOK ###########
+########### END BUILD HOOK ###########
+
+
+
+########### BEGIN BOOT HOOK ###########
+########### END BOOT HOOK ###########
+
+
+
+########### BEGIN BUILD ###########
+########### END BUILD ###########
 
 
