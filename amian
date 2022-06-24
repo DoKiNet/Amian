@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.6
+AMIAN_BUILD=2.0.7
 
 apt update
 apt -y install live-build
@@ -38,7 +38,7 @@ echo task-gnome-desktop > config/package-lists/desktop.list.chroot
 echo task-english >> config/package-lists/desktop.list.chroot
 
 # Configure repository packages
-echo    "torbrowser-launcher nocache net-tools curl elinks git wget macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount" > config/package-lists/custom.list.chroot
+echo    "nocache net-tools curl elinks git wget macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois cryptsetup cryptmount" > config/package-lists/custom.list.chroot
 
 ###HOOK
 cat > config/hooks/live/amian.hook.chroot << EOF
@@ -64,9 +64,9 @@ chmod a+rx /usr/local/bin/youtube-dl
 
 mkdir -p /opt
 cd /opt
-wget https://www.torproject.org/dist/torbrowser/10.0/tor-browser-linux64-10.0_en-US.tar.xz
-tar -xvJf tor-browser-linux64-10.0_en-US.tar.xz
-rm tor-browser-linux64-10.0_en-US.tar.xz
+wget https://www.torproject.org/dist/torbrowser/11.0.14/tor-browser-linux64-11.0.14_en-US.tar.xz
+tar -xvJf tor-browser-linux64-11.0.14_en-US.tar.xz
+rm tor-browser-linux64-11.0.14_en-US.tar.xz
 mv tor-browser_en-US torbrowser
 
 cd /usr/share/applications
