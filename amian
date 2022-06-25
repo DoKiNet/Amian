@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.10
+AMIAN_BUILD=2.0.11
 
 apt update
 apt -y install live-build
@@ -14,8 +14,13 @@ apt -y install live-build
 
 
 ########### BEGIN CLEAN ###########
-lb clean
-rm -f config/binary config/bootstrap config/chroot config/common config/source
+#lb clean
+#rm -fr config
+#rm -fr .build
+#rm -fr auto
+#rm -fr chroot
+#rm -fr cache
+#rm -fr local
 ########### END CLEAN ###########
 
 
@@ -29,8 +34,8 @@ lb config \
         --architectures amd64 \
         --debian-installer none \
         --binary-image iso-hybrid  \
-	--mirror-bootstrap http://ftp.it.debian.org/debian/   \
-	--mirror-binary http://ftp.it.debian.org/debian/      \
+	--mirror-bootstrap https://ftp.debian.org/debian/   \
+	--mirror-binary https://ftp.debian.org/debian/      \
         --archive-areas "main contrib non-free" \
         --bootappend-live "boot=live timezone=Europe/Rome locales=en_US.UTF-8 keyboard-layouts=it username=user \
 			   hostname=localhost user-fullname=user@localhost" \
@@ -65,7 +70,7 @@ EOF
 ########### BEGIN BOOT HOOK ###########
 mkdir -p config/includes.chroot_after_packages/lib/live/config
 touch config/includes.chroot_after_packages/lib/live/config/amian_hook_boot.sh
-cat > config/includes.chroot_after_packages/amian_hook_boot.sh << EOF
+cat > config/includes.chroot_after_packages/lib/live/config/amian_hook_boot.sh << EOF
 #!/bin/bash
 
 set -e
