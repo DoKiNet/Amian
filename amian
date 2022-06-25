@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.9
+AMIAN_BUILD=2.0.10
 
 apt update
 apt -y install live-build
@@ -20,15 +20,28 @@ rm -f config/binary config/bootstrap config/chroot config/common config/source
 
 
 
-
-
-
 ########### BEGIN CONFIG ###########
+lb config \
+	--memtest memtest86+ \
+        --mode debian \
+        --distribution bullseye  \
+        --bootloaders syslinux \
+        --architectures amd64 \
+        --debian-installer none \
+        --binary-image iso-hybrid  \
+	--mirror-bootstrap http://ftp.it.debian.org/debian/   \
+	--mirror-binary http://ftp.it.debian.org/debian/      \
+        --archive-areas "main contrib non-free" \
+        --bootappend-live "boot=live timezone=Europe/Rome locales=en_US.UTF-8 keyboard-layouts=it username=user \
+			   hostname=localhost user-fullname=user@localhost" \
 ########### END CONFIG ###########
 
 
 
 ########### BEGIN PACKAGES ###########
+echo    "firefox-esr net-tools curl elinks git wget macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois \
+cryptsetup cryptmount task-gnome-desktop task-english" \
+> config/package-lists/custom.list.chroot
 ########### END PACKAGES ###########
 
 
@@ -39,16 +52,31 @@ rm -f config/binary config/bootstrap config/chroot config/common config/source
 
 
 ########### BEGIN BUILD HOOK ###########
+cat > config/hooks/live/amian_hook_build.chroot << EOF
+#!/bin/bash
+
+set -e
+
+EOF
 ########### END BUILD HOOK ###########
 
 
 
 ########### BEGIN BOOT HOOK ###########
+mkdir -p config/includes.chroot_after_packages/lib/live/config
+touch config/includes.chroot_after_packages/lib/live/config/amian_hook_boot.sh
+cat > config/includes.chroot_after_packages/amian_hook_boot.sh << EOF
+#!/bin/bash
+
+set -e
+
+EOF
 ########### END BOOT HOOK ###########
 
 
 
 ########### BEGIN BUILD ###########
+lb build
 ########### END BUILD ###########
 
 
