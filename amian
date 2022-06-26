@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.11
+AMIAN_BUILD=2.0.12
 
 apt update
 apt -y install live-build
@@ -61,6 +61,78 @@ cat > config/hooks/live/amian_hook_build.chroot << EOF
 #!/bin/bash
 
 set -e
+
+#change password for "user"
+echo "user:live" | chpasswd
+
+
+
+
+#Install google chrome stable
+cd /root
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+apt -y install ./google-chrome-stable_current_amd64.deb
+rm google-chrome-stable_current_amd64.deb
+
+
+
+
+
+#Install youtube-dl
+curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+chmod a+rx /usr/local/bin/youtube-dl
+
+
+
+
+
+#Install torbrowser 11.0.14
+mkdir -p /opt
+cd /opt
+wget https://www.torproject.org/dist/torbrowser/11.0.14/tor-browser-linux64-11.0.14_en-US.tar.xz
+tar -xvJf tor-browser-linux64-11.0.14_en-US.tar.xz
+rm tor-browser-linux64-11.0.14_en-US.tar.xz
+mv tor-browser_en-US torbrowser
+chown -R user:user /opt/torbrowser
+chmod -R 777 /opt/torbrowser
+
+cd /usr/share/applications
+touch start-tor-browser.desktop
+chmod 755 start-tor-browser.desktop
+cat > start-tor-browser.desktop << EOB
+#!/usr/bin/env ./Browser/execdesktop
+[Desktop Entry]
+Type=Application
+Name=Tor Browser
+GenericName=Web Browser
+Comment=Tor Browser is +1 for privacy and −1 for mass surveillance
+Categories=Network;WebBrowser;Security;
+Exec=sh -c '"/opt/torbrowser/Browser/start-tor-browser" --detach || ([ !  -x "/opt/torbrowser/Browser/start-tor-browser" ] && "$(dirname "$*")"/Browser/start-tor-browser --detach)' dummy %k
+X-TorBrowser-ExecShell=./Browser/start-tor-browser --detach
+Icon=/opt/torbrowser/Browser/browser/chrome/icons/default/default128.png
+StartupWMClass=Tor Browser
+EOB
+
+
+
+
+#Vim configuration
+touch /home/user/.vimrc
+echo "set mouse=" > /home/user/.vimrc
+touch /root/.vimrc
+echo "set mouse=" > /root/.vimrc
+
+
+
+
+#Set Amian Version
+mkdir -p /etc
+touch /etc/amian_version
+echo "Amian - Version: $AMIAN_VERSION   Build: $AMIAN_BUILD" > /etc/amian_version
+
+
+
+
 
 EOF
 ########### END BUILD HOOK ###########
