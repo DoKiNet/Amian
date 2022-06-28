@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.13
+AMIAN_BUILD=2.0.14
 
 apt update
 apt -y install live-build
@@ -28,17 +28,17 @@ rm -fr local
 ########### BEGIN CONFIG ###########
 lb config \
 	--memtest memtest86+ \
-        --mode debian \
-        --distribution bullseye  \
-        --bootloaders syslinux \
-        --architectures amd64 \
-        --debian-installer none \
-        --binary-image iso-hybrid  \
+    --mode debian \
+    --distribution bullseye  \
+    --bootloaders syslinux \
+    --architectures amd64 \
+    --debian-installer none \
+    --binary-image iso-hybrid  \
 	--mirror-bootstrap https://ftp.debian.org/debian/   \
 	--mirror-binary https://ftp.debian.org/debian/      \
-        --archive-areas "main contrib non-free" \
-        --bootappend-live "boot=live timezone=Europe/Rome locales=en_US.UTF-8 keyboard-layouts=it username=user \
-			   hostname=localhost user-fullname=user@localhost" \
+    --archive-areas "main contrib non-free" \
+    --bootappend-live "boot=live timezone=Europe/Rome locales=en_US.UTF-8 keyboard-layouts=it username=user \
+			           hostname=localhost user-fullname=user@localhost" \
 ########### END CONFIG ###########
 
 
@@ -52,6 +52,8 @@ cryptsetup cryptmount task-gnome-desktop task-english" \
 
 
 ########### BEGIN FILES ###########
+mkdir -p config/includes.chroot_after_packages/usr/share/amian/images
+cp images/amian_wallpaper.png config/includes.chroot_after_packages/usr/share/amian/images/
 ########### END FILES ###########
 
 
@@ -150,6 +152,16 @@ set -e
 
 EOF
 ########### END BOOT HOOK ###########
+
+
+
+####### BEGIN BOOTLOADER #######
+mkdir -p config/bootloaders
+cp -r /usr/share/live/build/bootloaders/isolinux config/bootloaders/
+cp images/amian_isolinux_wallpaper.png config/bootloaders/isolinux/splash.png
+sed -i 's/timeout.*/timeout 30/' config/bootloaders/isolinux/isolinux.cfg
+####### END BOOTLOADER #######
+
 
 
 
