@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.20
+AMIAN_BUILD=2.0.21
 
 apt update
 apt -y install live-build
@@ -160,6 +160,9 @@ chmod -R 777 /opt/torbrowser
 
 
 EOF
+
+chmod 755 config/includes.chroot_after_packages/lib/live/config/1200-amian-hook-boot
+
 ########### END BOOT HOOK ###########
 
 
