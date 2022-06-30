@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.19
+AMIAN_BUILD=2.0.20
 
 apt update
 apt -y install live-build
@@ -149,9 +149,9 @@ EOF
 
 ########### BEGIN BOOT HOOK ###########
 mkdir -p config/includes.chroot_after_packages/lib/live/config
-touch config/includes.chroot_after_packages/lib/live/config/amian_hook_boot.sh
-cat > config/includes.chroot_after_packages/lib/live/config/amian_hook_boot.sh << EOF
-#!/bin/bash
+touch config/includes.chroot_after_packages/lib/live/config/1200-amian-hook-boot
+cat > config/includes.chroot_after_packages/lib/live/config/1200-amian-hook-boot << EOF
+#!/bin/sh
 
 set -e
 
