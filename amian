@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.16
+AMIAN_BUILD=2.0.17
 
 apt update
 apt -y install live-build
