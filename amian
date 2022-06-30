@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.18
+AMIAN_BUILD=2.0.19
 
 apt update
 apt -y install live-build
@@ -45,7 +45,7 @@ lb config \
 
 ########### BEGIN PACKAGES ###########
 echo    "firefox-esr net-tools curl elinks git wget macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois \
-cryptsetup cryptmount task-gnome-desktop task-english" \
+cryptsetup cryptmount task-gnome-desktop task-english python" \
 > config/package-lists/custom.list.chroot
 ########### END PACKAGES ###########
 
@@ -66,6 +66,8 @@ set -e
 
 #change password for "user"
 #echo "user:live" | chpasswd
+
+apt -y remove termit
 
 
 
@@ -95,8 +97,7 @@ wget https://www.torproject.org/dist/torbrowser/11.0.14/tor-browser-linux64-11.0
 tar -xvJf tor-browser-linux64-11.0.14_en-US.tar.xz
 rm tor-browser-linux64-11.0.14_en-US.tar.xz
 mv tor-browser_en-US torbrowser
-#chown -R user:user /opt/torbrowser
-chmod -R 777 /opt/torbrowser
+
 
 cd /usr/share/applications
 touch start-tor-browser.desktop
@@ -153,6 +154,10 @@ cat > config/includes.chroot_after_packages/lib/live/config/amian_hook_boot.sh <
 #!/bin/bash
 
 set -e
+
+chown -R user:user /opt/torbrowser
+chmod -R 777 /opt/torbrowser
+
 
 EOF
 ########### END BOOT HOOK ###########
