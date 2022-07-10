@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.21
+AMIAN_BUILD=2.0.22
 
 apt update
 apt -y install live-build
@@ -27,25 +27,25 @@ rm -fr local
 
 ########### BEGIN CONFIG ###########
 lb config \
-	--memtest memtest86+ \
+    --memtest memtest86+ \
     --mode debian \
     --distribution bullseye  \
     --bootloaders syslinux \
     --architectures amd64 \
     --debian-installer none \
     --binary-image iso-hybrid  \
-	--mirror-bootstrap https://ftp.debian.org/debian/   \
-	--mirror-binary https://ftp.debian.org/debian/      \
+    --mirror-bootstrap https://ftp.debian.org/debian/   \
+    --mirror-binary https://ftp.debian.org/debian/      \
     --archive-areas "main contrib non-free" \
     --bootappend-live "boot=live timezone=Europe/Rome locales=en_US.UTF-8 keyboard-layouts=it username=user \
-			           hostname=localhost user-fullname=user@localhost" \
+			           hostname=localhost user-fullname=user" \
 ########### END CONFIG ###########
 
 
 
 ########### BEGIN PACKAGES ###########
 echo    "firefox-esr net-tools curl elinks git wget macchanger aircrack-ng vim inkscape gimp nmap iptraf vlc whois \
-cryptsetup cryptmount task-gnome-desktop task-english python" \
+cryptsetup cryptmount task-gnome-desktop task-english python remmina" \
 > config/package-lists/custom.list.chroot
 ########### END PACKAGES ###########
 
@@ -127,6 +127,50 @@ touch /root/.vimrc
 echo "set mouse=" > /root/.vimrc
 
 
+
+
+
+
+#Gnome3 Configuration
+mkdir -p /home/user/.config/autostart
+
+cat > /home/user/.config/myscript.sh << EOF
+#!/bin/bash
+set -e
+gsettings set org.gnome.desktop.background picture-uri file:///usr/share/amian/images/amian_wallpaper.png
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'nothing'
+gsettings set org.gnome.mutter center-new-windows true
+gsettings set org.gnome.shell favorite-apps "['google-chrome.desktop','firefox-esr.desktop','start-tor-browser.desktop','org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop','org.gnome.Terminal.desktop']"
+gnome-shell-extension-tool -e  apps-menu@gnome-shell-extensions.gcampax.github.com
+
+ret=\$(zenity --entry --title="Amian" --text="Select your keyboard" --entry-text="us" it fr de es ru gb fi pt jp cn hu no ro se --cancel-label cancel --ok-label ok)
+
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', '\$ret')]"
+
+if [ "\$ret" = "it" ]; then
+               sudo ln -fs /usr/share/zoneinfo/Europe/Rome /etc/localtime
+            else
+               sudo ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
+fi
+
+EOF
+
+
+cat > /home/user/.config/autostart/myscript.desktop << EOF
+[Desktop Entry]
+Name=MyScript
+GenericName=Gnome3 Configuration
+Comment=this is my custom configuration
+Exec=/bin/sh /home/user/.config/myscript.sh
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
+EOF
+
+chmod -R 777 /home/user/.config
 
 
 
