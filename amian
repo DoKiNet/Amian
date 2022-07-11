@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.28
+AMIAN_BUILD=2.0.29
 
 apt update
 apt -y install live-build
@@ -19,13 +19,14 @@ rm -fr config
 rm -fr .build
 rm -fr auto
 rm -fr chroot
-rm -fr cache
+#rm -fr cache
 rm -fr local
 ########### END CLEAN ###########
 
 
 
 ########### BEGIN CONFIG ###########
+
 lb config \
     --memtest memtest86+ \
     --mode debian \
@@ -34,8 +35,6 @@ lb config \
     --architectures amd64 \
     --debian-installer none \
     --binary-image iso-hybrid  \
-    --mirror-bootstrap https://ftp.debian.org/debian/   \
-    --mirror-binary https://ftp.debian.org/debian/      \
     --archive-areas "main contrib non-free" \
     --bootappend-live "boot=live timezone=Europe/Rome locales=en_US.UTF-8 keyboard-layouts=it username=user \
 			           hostname=localhost user-fullname=user" \
