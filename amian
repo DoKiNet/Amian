@@ -4,7 +4,7 @@ set -e
 
 
 AMIAN_VERSION=2.0
-AMIAN_BUILD=2.0.27
+AMIAN_BUILD=2.0.28
 
 apt update
 apt -y install live-build
@@ -19,7 +19,7 @@ rm -fr config
 rm -fr .build
 rm -fr auto
 rm -fr chroot
-#rm -fr cache
+rm -fr cache
 rm -fr local
 ########### END CLEAN ###########
 
